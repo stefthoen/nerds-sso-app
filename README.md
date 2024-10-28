@@ -1,3 +1,58 @@
+# Readme
+
+## Log
+
+Na het ontvangen van de opdracht heb ik besloten om het met Laravel en PHP te bouwen. Ik dacht in eerste instantie een custom PHP applicatie te bouwen, maar de opdracht was dusdanig complex dat ik niet binnen de tijd het 'from scratch' zou kunnen bouwen, dus greep ik naar Laravel, die daar wel de tools voor heeft (Laravel Passport). 
+
+Het is alweer een tijdje geleden dat ik iets met Laravel gedaan heb, dus ik was wat tijd kwijt met uitvinden waar alles ook alweer stond en hoe dingen veranderd zijn sinds de laatste keer dat ik het gebruikt heb. Tevens heb niet eerder oAuth2 zelf geimplementeerd. Ik heb het alleen maar SSO geconsumeerd (van Google, GitHub, etc.).
+
+Aan het einde van de ochtend had ik het volgende staan:
+- Authenticatie met user/pass waarin je in een omgeving komt waarin je clients kunt aanmaken.
+- Bij het aanmaken van een client krijg je een secret en client id terug.
+
+Als volgende stap wou ik in Postman gaan testen of ik hiermee succesvol kon inloggen. Ik kreeg een foutmelding dat hij het key-pair niet kon vinden. Ik veranderde de locatie van het key-pair en probeerde het daarna weer, maar hij gaf dezelfde foutmelding. Ik heb toen meerdere commando's uitgevoerd om caching leeg te gooien of op een andere manier de state van de app te resetten, maar niet werkte. Ten slotte startte ik mijn computer maar opnieuw op om te kijken of dat effect had.
+
+Na de reboot, wou hij http://localhost niet meer laden. Ik ben vervolgens 3 uur bezig geweest met Laravel, Sail, Docker en Linux te debuggen, maar ik heb het niet kunnen vinden. Ik heb een nieuw Sail project gestart en dat opgestart, en ook daar wou hij localhost niet laden. Ik heb toen deze Loom video opgenomen: https://www.loom.com/share/6644cf2fb3b94b13b57a8e5eadb88624?sid=e3103a50-738d-4cfd-a8ac-ccfbd671423e. En ben dit gaan schrijven. 
+
+In de tijd die ik over had, ben ik toen maar een Next.js app met NextAuth.js gaan bouwen om een SSO van een grote provider te consumeren, zoals bijv. GitHub. Ik was hier mee bezig en ik had mijn browser open staan en toen zag ik dat ik ineens dat mijn Sail project ineens wel geladen was. Frustrerend, maar ik kan nu i.i.g. wel weer verder met het SSO gedeelte, ook al heb ik geen antwoord voor waarom hij het 3 uur lang niet deed, want ik heb werkelijk niets veranderd. Onderdeel van die 3 uur was ook dat Composer i.c.m. Laravel ineens plat lag, waardoor ik Laravel niet kon downloaden. Ik stop nu even met typen en kijk of ik localhost ook weer werkend kan krijgen voor de `nerds-sso-app`. Ik heb nog 2 uur.
+
+Ja, mijn app doet het ook ineens weer. Ik kan weer verder. Ik ben hier helaas 4 uur mee bezig geweest, maar ik focus mij nu weer even op de app om te kijken of ik het nog af kan krijgen binnen de tijd.
+
+Ik heb het probleem met het key-pair kunnen fixen en het is mij nu gelukt om via Postman een bearer token te krijgen. Ik heb een filmpje opgenomen met een demonstratie: https://www.loom.com/share/fbdfbb333ce34fdfa2c34898b25493a5?sid=b99ae71e-929b-4421-88d9-fa57644357c0
+
+In de laatste minuten heb ik het revoken van het bearer token bij het uitloggen nog kunnen toevoegen, maar dit heb ik niet meer kunnen testen.
+
+## Setup
+
+Ik heb Sails gebruikt om Laravel op Linux te installeren. Ik denk dat je het volgende kunt doen om het bij jou werkend te krijgen:
+
+### Laravel
+
+1. `git clone git@github.com:stefthoen/nerds-sso-app.git`
+2. Ga naar de root van het project en run `composer install` en `npm install`
+3. Start Sails met `./vendor/bin/sails up` (voor OS-specifieke setup, check de [Laravel documentatie](https://laravel.com/docs/11.x/installation#docker-installation-using-sail))
+4. Run de migrations met `/vendor/bin/sails artisan migrate`
+5. [Volg de installatie stappen van Passport](https://laravel.com/docs/11.x/passport#installation)
+6. [Voeg keys toe aan je `.env` file](https://laravel.com/docs/11.x/passport#loading-keys-from-the-environment)
+
+### Postman call #1
+
+Zoals ik zei had ik geen tijd om de PoC app te implementeren, maar ik heb in Postman wel de werking van de Laravel app gesimuleerd. In de Loom video's kun je het denk ik wel volgen, maar ik zal het hier ook even typen.
+
+1. Ga naar http://localhost en maak daar een account aan.
+2. Voeg een client toe. Naam mag van alles zijn. Callback is http://localhost/callback.
+3. In het scherm  dat je dan te zien krijgt, zie je je secret. Kopieer die, want de secret die ik op http://localhost/dashboard/clients laat zien toont de encrypted secret.
+4. Voeg een GET request toe met deze URL: http://localhost/oauth/authorize. Gebruik de volgende Params: [client_id, <kopieer hier de client id in de app, waarschijnlijk 1 voor de eerste>], [redirect_uri, "http://localhost/callback"], [response_type, "code"], [scope, ""], [state, <random string van 40 characters: asdfasdfasdfasdfasdfasdfasdfasdfasdfasdf>]
+5. Neem de URL die Postman genereert en plak die in je browser. Je krijgt een 404, maar in de URL zie je dat de code is ingevuld. Kopieer deze code.
+
+### Postman call #2
+
+1. Maak een POST request in Postman met deze URL: http://localhost/oauth/token
+2. Vul daar bij Body -> form-data de volgende key-value pairs in: [grant_type, "authorization_code"]. Verder kun je `client_id`, `client_secret` en `redirect_url` overnemen van de GET call. Ook `code` neem je over, maar daar plak je de code die je bij `Postman call #1 stap 5 hebt gekregen.
+3. Druk <Send> en je krijgt een JSON response met de bearer token in het `access_token` veld.
+
+## Overige documentatie Laravel
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
