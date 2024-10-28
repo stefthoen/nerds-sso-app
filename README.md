@@ -4,21 +4,21 @@
 
 Na het ontvangen van de opdracht heb ik besloten om het met Laravel en PHP te bouwen. Ik dacht in eerste instantie een custom PHP applicatie te bouwen, maar de opdracht was dusdanig complex dat ik niet binnen de tijd het 'from scratch' zou kunnen bouwen, dus greep ik naar Laravel, die daar wel de tools voor heeft (Laravel Passport). 
 
+Het client gedeelte wou ik implementeren met een Next.js app die NextAuth.js implementeert. Ik had de [NextAuth](https://github.com/nextauthjs/next-auth-example) demo in een repo gegooid met het idee om die aan te passen en er een 'logout' API call mee te doen naar de Laravel app, die de bearer token revoked.
+
 Het is alweer een tijdje geleden dat ik iets met Laravel gedaan heb, dus ik was wat tijd kwijt met uitvinden waar alles ook alweer stond en hoe dingen veranderd zijn sinds de laatste keer dat ik het gebruikt heb. Tevens heb niet eerder oAuth2 zelf geimplementeerd. Ik heb het alleen maar SSO geconsumeerd (van Google, GitHub, etc.).
 
 Aan het einde van de ochtend had ik het volgende staan:
 - Authenticatie met user/pass waarin je in een omgeving komt waarin je clients kunt aanmaken.
 - Bij het aanmaken van een client krijg je een secret en client id terug.
 
-Als volgende stap wou ik in Postman gaan testen of ik hiermee succesvol kon inloggen. Ik kreeg een foutmelding dat hij het key-pair niet kon vinden. Ik veranderde de locatie van het key-pair en probeerde het daarna weer, maar hij gaf dezelfde foutmelding. Ik heb toen meerdere commando's uitgevoerd om caching leeg te gooien of op een andere manier de state van de app te resetten, maar niet werkte. Ten slotte startte ik mijn computer maar opnieuw op om te kijken of dat effect had.
+Als volgende stap wou ik in Postman gaan testen of ik hiermee succesvol kon inloggen. Ik kreeg een foutmelding dat hij het key-pair niet kon vinden. Ik veranderde de locatie van het key-pair en probeerde het daarna weer, maar hij gaf dezelfde foutmelding. Ik heb toen meerdere commando's uitgevoerd om caching leeg te gooien of op een andere manier de state van de app te resetten, maar ik kreeg het niet werkend. Ten slotte startte ik mijn computer maar opnieuw op om te kijken of dat effect had.
 
 Na de reboot, wou hij http://localhost niet meer laden. Ik ben vervolgens 3 uur bezig geweest met Laravel, Sail, Docker en Linux te debuggen, maar ik heb het niet kunnen vinden. Ik heb een nieuw Sail project gestart en dat opgestart, en ook daar wou hij localhost niet laden. Ik heb toen deze Loom video opgenomen: https://www.loom.com/share/6644cf2fb3b94b13b57a8e5eadb88624?sid=e3103a50-738d-4cfd-a8ac-ccfbd671423e. En ben dit gaan schrijven. 
 
-In de tijd die ik over had, ben ik toen maar een Next.js app met NextAuth.js gaan bouwen om een SSO van een grote provider te consumeren, zoals bijv. GitHub. Ik was hier mee bezig en ik had mijn browser open staan en toen zag ik dat ik ineens dat mijn Sail project ineens wel geladen was. Frustrerend, maar ik kan nu i.i.g. wel weer verder met het SSO gedeelte, ook al heb ik geen antwoord voor waarom hij het 3 uur lang niet deed, want ik heb werkelijk niets veranderd. Onderdeel van die 3 uur was ook dat Composer i.c.m. Laravel ineens plat lag, waardoor ik Laravel niet kon downloaden. Ik stop nu even met typen en kijk of ik localhost ook weer werkend kan krijgen voor de `nerds-sso-app`. Ik heb nog 2 uur.
+In de tijd die ik over had, ben ik toen maar een Next.js app met NextAuth.js gaan bouwen, om een SSO van een grote provider te consumeren, zoals bijv. GitHub. Ik was hier mee bezig en ik had mijn browser open staan en toen zag ik dat mijn Sail project ineens geladen was. Frustrerend dat ik zoveel tijd kwijt was geraakt, maar ik kon i.i.g. weer verder met het SSO gedeelte, ook al heb ik geen antwoord voor waarom hij het 3 uur lang niet deed, want ik had werkelijk niets veranderd. Onderdeel van die 3 uur was ook dat Composer i.c.m. Laravel ineens plat lag, waardoor ik Laravel niet kon downloaden. Ik had nog 2 uur.
 
-Ja, mijn app doet het ook ineens weer. Ik kan weer verder. Ik ben hier helaas 4 uur mee bezig geweest, maar ik focus mij nu weer even op de app om te kijken of ik het nog af kan krijgen binnen de tijd.
-
-Ik heb het probleem met het key-pair kunnen fixen en het is mij nu gelukt om via Postman een bearer token te krijgen. Ik heb een filmpje opgenomen met een demonstratie: https://www.loom.com/share/fbdfbb333ce34fdfa2c34898b25493a5?sid=b99ae71e-929b-4421-88d9-fa57644357c0
+Ik heb het probleem met het key-pair kunnen fixen en het is mij gelukt om via Postman een bearer token te krijgen. Ik heb een filmpje opgenomen met een demonstratie: https://www.loom.com/share/fbdfbb333ce34fdfa2c34898b25493a5?sid=b99ae71e-929b-4421-88d9-fa57644357c0
 
 In de laatste minuten heb ik het revoken van het bearer token bij het uitloggen nog kunnen toevoegen, maar dit heb ik niet meer kunnen testen.
 
